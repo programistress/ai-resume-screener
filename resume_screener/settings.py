@@ -47,8 +47,12 @@ WSGI_APPLICATION = 'resume_screener.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ai_resume_screener',
+        'USER': 'kristina',
+        'PASSWORD': '12345japan',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
