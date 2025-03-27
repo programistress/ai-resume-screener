@@ -9,3 +9,4 @@ def upload_resume(request):
     else:
         form = ResumeUploadForm()
     return render(request, 'upload.html', {'form': form})
+
