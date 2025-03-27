@@ -7,6 +7,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'resumes',
+    'job_descriptions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

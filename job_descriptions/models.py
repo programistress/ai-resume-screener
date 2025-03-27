@@ -3,11 +3,11 @@ from django.contrib.postgres.fields import ArrayField
 
 # before processing
 class JobDescription(models.Model):
-    raw_test = models.TextField() 
+    raw_text = models.TextField() 
     uploaded_at = models.DateTimeField(auto_now_add=True) # for tracking?
 
     def __str__(self):
-      return self.raw_test[:50]  # first 50 characters of the raw text
+      return self.raw_text[:50]  # first 50 characters of the raw text
 
 # after processing
 class ProcessedJobDesc(models.Model):
