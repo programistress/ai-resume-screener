@@ -2,6 +2,7 @@ from django.db import models
 from pathlib import Path
 from django.core.exceptions import ValidationError
 from .utils.text_extraction import extract_text
+from .utils.bert_embeddings import get_bert_embedding
 import os
 
 
@@ -9,6 +10,7 @@ class Resume(models.Model):
     file = models.FileField(upload_to='resumes/')
     uploaded_at = models.DateTimeField(auto_now_add=True) # for tracking
     extracted_text = models.TextField(blank=True, null=True)
+    embedding_vector = models.JSONField(blank=True, null=True)
 
     def __str__(self):
         return self.extracted_text[:50] if self.extracted_text else f"Resume {self.id}"
@@ -34,8 +36,10 @@ class Resume(models.Model):
             try:
                 extracted_text = extract_text(file_path)
                 if extracted_text:
-                    self.extracted_text = extracted_text
+                    self.extracted_text = extracted_text 
                     super().save(update_fields=['extracted_text'])
+                    self.embedding_vector = get_bert_embedding(self.extracted_text)
+                    super().save(update_fields=['embedding_vector'])
                 else:
                     print("No text could be extracted.")
             except Exception as e:
