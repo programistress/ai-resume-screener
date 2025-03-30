@@ -2,7 +2,7 @@ from django.db import models
 from pathlib import Path
 from django.core.exceptions import ValidationError
 from .utils.text_extraction import extract_text
-from .utils.bert_embeddings import get_bert_embedding
+from common.bert_utils import get_bert_embedding
 import os
 
 
