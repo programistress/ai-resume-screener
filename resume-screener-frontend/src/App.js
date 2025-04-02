@@ -1,7 +1,6 @@
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import WelcomePage from './pages/WelcomePage';
-import ResumeUploadPage from './pages/ResumeUploadPage';
 import JobUploadPage from './pages/JobUploadPage';
 import ResultsPage from './pages/ResultsPage';
 
@@ -11,7 +10,6 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<WelcomePage />} />
-          <Route path="/upload-resume" element={<ResumeUploadPage />} />
           <Route path="/upload-job" element={<JobUploadPage />} />
           <Route path="/results" element={<ResultsPage />} />
         </Routes>

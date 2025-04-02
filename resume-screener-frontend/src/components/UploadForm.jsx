@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const UploadForm = ({isFileUpload, fileTypes, onSubmit}) => {
     const [file, setFile] = useState(null)
@@ -20,11 +20,16 @@ const UploadForm = ({isFileUpload, fileTypes, onSubmit}) => {
         if (fileTypes && !fileTypes.includes(`.${file_extension}`)) {
             setError(`Sorry, we only accept files of ${fileTypes.join(',')} formats`)
             setFile(null)
+            return
         }
+
+        setFile(selectedFile)  // updating file state when valid
+        setError('')  // clear any previous errors
     }
 
     const handleTextChange = (e) => {
         setText(e.target.value)
+        setError('') 
     }
 
     const handleSubmit = async(e) => {
@@ -34,7 +39,7 @@ const UploadForm = ({isFileUpload, fileTypes, onSubmit}) => {
             setError('Please select a valid file')
         }
 
-        if (!isFileUpload && !text) {
+        if (!isFileUpload && !text.trim()) {
             setError('Please enter your job description')
         }
 
