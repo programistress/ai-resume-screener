@@ -74,7 +74,7 @@ const UploadForm = ({isFileUpload, fileTypes, onSubmit}) => {
                     id='file-upload'
                 />
                 <label htmlFor="file-upload" className="file-upload__label">
-                    {file ? file.name : 'Choose a file'}
+                    {file ? 'Choose a different file' : 'Choose a file'}
                 </label>
                 {file && <div className="file-name">{file.name}</div>}
                 {/* maybe add a little file preview later */}
