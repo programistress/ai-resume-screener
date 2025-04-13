@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const UploadForm = ({isFileUpload, fileTypes, onSubmit}) => {
+const UploadForm = ({ isFileUpload, fileTypes, onSubmit }) => {
     const [file, setFile] = useState(null)
     const [text, setText] = useState('')
     const [isLoading, setIsLoading] = useState(false);
@@ -13,7 +13,7 @@ const UploadForm = ({isFileUpload, fileTypes, onSubmit}) => {
 
         if (!selectedFile) {
             setFile(null)
-        return
+            return
         }
 
         const file_extension = selectedFile.name.split('.').pop().toLowerCase();
@@ -29,10 +29,10 @@ const UploadForm = ({isFileUpload, fileTypes, onSubmit}) => {
 
     const handleTextChange = (e) => {
         setText(e.target.value)
-        setError('') 
+        setError('')
     }
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
         if (isFileUpload && !file) {
@@ -61,43 +61,43 @@ const UploadForm = ({isFileUpload, fileTypes, onSubmit}) => {
         }
     }
 
-  return (
-    <div className='upload-form__container'>
-        {error && <div className="error__message">{error}</div>}
-        <form onSubmit={handleSubmit}>
-        {isFileUpload ? (
-            <div className='file-input__container'>
-                <input 
-                    type='file'
-                    onChange={handleFileChange}
-                    accept={fileTypes.join(',')} //types of files that our application accepts
-                    id='file-upload'
-                />
-                <label htmlFor="file-upload" className="file-upload__label">
-                    {file ? 'Choose a different file' : 'Choose a file'}
-                </label>
-                {file && <div className="file-name">{file.name}</div>}
-                {/* maybe add a little file preview later */}
-            </div>
-        ) : (
-            <textarea
-            value={text}
-            onChange={handleTextChange}
-            placeholder='Paste your job description here...'
-            rows={15}
-            className='upload__form-textarea'
-            />
-        )}
-        <button
-        type='submit'
-        className='submit__button'
-        disabled={isLoading}
-        >
-        {isLoading ? 'Processing...' : 'Submit'}
-        </button>
-      </form>
-    </div>
-  )
+    return (
+        <div className='upload-form__container'>
+            {error && <div className="error__message">{error}</div>}
+            <form onSubmit={handleSubmit}>
+                {isFileUpload ? (
+                    <div className='file-input__container'>
+                        <input
+                            type='file'
+                            onChange={handleFileChange}
+                            accept={fileTypes.join(',')} //types of files that our application accepts
+                            id='file-upload'
+                        />
+                        <label htmlFor="file-upload" className="file-upload__label">
+                            {file ? 'Choose a different file' : 'Choose a file'}
+                        </label>
+                        {file && <div className="file-name">{file.name}</div>}
+                        {/* maybe add a little file preview later */}
+                    </div>
+                ) : (
+                    <textarea
+                        value={text}
+                        onChange={handleTextChange}
+                        placeholder='Paste your job description here...'
+                        rows={15}
+                        className='upload__form-textarea'
+                    />
+                )}
+                <button
+                    type='submit'
+                    className='submit__button'
+                    disabled={isLoading}
+                >
+                    {isLoading ? 'Processing...' : 'Submit'}
+                </button>
+            </form>
+        </div>
+    )
 }
 
 export default UploadForm

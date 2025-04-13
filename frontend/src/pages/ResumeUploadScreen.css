@@ -1,44 +1,43 @@
+body {
+  line-height: 1.5;
+}
 
-  body {
-    line-height: 1.5;
-  }
+/* Action Section */
+.second__screen {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 100px;
+  align-items: center;
+}
 
-  /* Action Section */
-  .second__screen {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 100px;
-    align-items: center;
-  }
+.row {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+}
 
-  .row {
-    width: 90%;
-    display: flex;
-    justify-content: space-between;
-  }
+.right {
+  text-align: right;
+}
 
-  .right {
-    text-align: right;
-  }
+.requirements {
+  margin-top: 15px;
+  max-width: 758px;
+  font-size: 17px;
+  font-style: italic;
+  color: var(--text);
+  animation: fadeIn 1.5s ease-out;
+}
 
-  .requirements {
-    margin-top: 15px;
-    max-width: 758px;
-    font-size: 17px;
-    font-style: italic;
-    color: var(--text);
-    animation: fadeIn 1.5s ease-out;
-  }
+.upload__form-header {
+  width: 50%;
+  max-width: 800px;
+  animation: fadeInLeft 1s ease-out;
+}
 
-  .upload__form-header {
-    width: 50%;
-    max-width: 800px;
-    animation: fadeInLeft 1s ease-out;
-  }
-  
 
 /* Upload Form */
 .upload__form {
@@ -168,4 +167,3 @@
   transform: none;
   box-shadow: none;
 }
-

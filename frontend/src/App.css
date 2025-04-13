@@ -1,18 +1,20 @@
 @import url(https://fonts.googleapis.com/css?family=Raleway:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic);
+
 :root {
-    --primary: #6246ea;
-    --primary-light: #858AE3;
-    --primary-dark: #4E148C;
-    --secondary: #6A4FB8;
-    --background: #f8f9fa;
-    --card-bg: #ffffff;
-    --text: #2b2c34;
-    --text-light: #555;
-    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.09);
-    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.12);
-    --radius: 12px;
-  }
+	--primary: #6246ea;
+	--primary-light: #858AE3;
+	--primary-dark: #4E148C;
+	--secondary: #6A4FB8;
+	--background: #f8f9fa;
+	--card-bg: #ffffff;
+	--text: #2b2c34;
+	--text-light: #555;
+	--shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+	--shadow-md: 0 8px 24px rgba(0, 0, 0, 0.09);
+	--shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.12);
+	--radius: 12px;
+}
+
 * {
 	font-family: Raleway;
 	margin: 0;
@@ -22,25 +24,44 @@
 	font: inherit;
 	vertical-align: baseline;
 }
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
 	display: block;
 }
+
 body {
 	line-height: 1;
 	overflow-x: hidden;
 }
-ol, ul {
+
+ol,
+ul {
 	list-style: none;
 }
-blockquote, q {
+
+blockquote,
+q {
 	quotes: none;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
 	content: '';
 	content: none;
 }
+
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
@@ -55,22 +76,22 @@ table {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-    isolation: isolate;
+	isolation: isolate;
 }
 
 .action__button {
-  background: linear-gradient(to right, #6A4FB8, #4E148C);
-  color: white;
-  border: none;
-  padding: 14px 30px;
-  border-radius: 30px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: block;
-  margin: 0 auto;
-  min-width: 180px;
-  box-shadow: 0 4px 15px rgba(106, 79, 184, 0.3);
+	background: linear-gradient(to right, #6A4FB8, #4E148C);
+	color: white;
+	border: none;
+	padding: 14px 30px;
+	border-radius: 30px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	display: block;
+	margin: 0 auto;
+	min-width: 180px;
+	box-shadow: 0 4px 15px rgba(106, 79, 184, 0.3);
 }
 
 .action__button:hover {
@@ -81,42 +102,44 @@ table {
 
 @keyframes fadeIn {
 	from {
-	  opacity: 0;
+		opacity: 0;
 	}
+
 	to {
-	  opacity: 1;
+		opacity: 1;
 	}
-  }
-  
-  @keyframes fadeInLeft {
+}
+
+@keyframes fadeInLeft {
 	from {
-	  opacity: 0;
-	  transform: translateX(-20px);
+		opacity: 0;
+		transform: translateX(-20px);
 	}
+
 	to {
-	  opacity: 1;
-	  transform: translateX(0);
+		opacity: 1;
+		transform: translateX(0);
 	}
-  }
-  
-  @keyframes fadeInRight {
+}
+
+@keyframes fadeInRight {
 	from {
-	  opacity: 0;
-	  transform: translateX(20px);
+		opacity: 0;
+		transform: translateX(20px);
 	}
+
 	to {
-	  opacity: 1;
-	  transform: translateX(0);
+		opacity: 1;
+		transform: translateX(0);
 	}
-  }
-  
-  @keyframes animate {
+}
+
+@keyframes animate {
 	0% {
-	  background-position: 0% center;
+		background-position: 0% center;
 	}
+
 	100% {
-	  background-position: 200% center;
+		background-position: 200% center;
 	}
-  }
-  
-  
+}
