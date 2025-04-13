@@ -85,6 +85,7 @@ const UploadForm = ({isFileUpload, fileTypes, onSubmit}) => {
             onChange={handleTextChange}
             placeholder='Paste your job description here...'
             rows={15}
+            className='upload__form-textarea'
             />
         )}
         <button

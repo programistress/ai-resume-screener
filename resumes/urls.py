@@ -1,6 +1,14 @@
-from django.urls import path
-from .views import upload_resume
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import ResumeUploadAPI, ResumeViewSet
+
+router = DefaultRouter()
+router.register(r'resumes', ResumeViewSet)
 
 urlpatterns = [
-    path('upload/', upload_resume, name='upload_resume'),
+    # API endpoint for uploading resumes
+    path('upload/', ResumeUploadAPI.as_view(), name='resume_upload_api'),
+    
+    # the router URLs for listing and retrieving resumes
+    path('', include(router.urls)),
 ]

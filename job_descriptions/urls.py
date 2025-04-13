@@ -1,6 +1,15 @@
-from django.urls import path
-from .views import upload_job_desc
+from django.urls import path, include
+from .views import JobDescriptionUploadAPI, JobDescriptionViewSet
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r'descriptions', JobDescriptionViewSet)
+
 
 urlpatterns = [
-    path('upload/', upload_job_desc, name='upload_job_desc'),
+     # API endpoint for uploading job descriptions
+    path('upload/', JobDescriptionUploadAPI.as_view(), name='job_desc_upload_api'),
+    
+    # include the router URLs for listing and retrieving job descriptions
+    path('', include(router.urls)),
 ]
