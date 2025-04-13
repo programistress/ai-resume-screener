@@ -139,3 +139,68 @@
   box-shadow: 0 5px 15px rgba(106, 79, 184, 0.3);
   text-align: center;
 }
+
+.uploaded-jobs-section {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.uploaded-jobs-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #4E148C;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(106, 79, 184, 0.2);
+}
+
+.uploaded-jobs-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.uploaded-job-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: white;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+}
+
+.uploaded-job-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.uploaded-job-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-grow: 1;
+  margin-right: 10px;
+  font-size: 15px;
+  color: var(--text, #2b2c34);
+}
+
+.delete-job-btn {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delete-job-btn:hover {
+  background-color: rgba(220, 53, 69, 0.2);
+}
