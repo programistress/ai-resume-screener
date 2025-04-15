@@ -37,7 +37,7 @@ const JobDescUploadScreen = forwardRef((props, ref) => {
 
   const handleDelete = async (jobId) => {
     try {
-      await api.delete(`/jobs/descriptions/${jobId}/`);
+      await api.delete(`job-descriptions/${jobId}/`);
       setUploadedJobs(uploadedJobs.filter((job) => job.id !== jobId));
     } catch (err) {
       console.error("Delete failed:", err);
