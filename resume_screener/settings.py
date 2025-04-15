@@ -6,8 +6,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
-    'resumes',
-    'job_descriptions',
+    'resume_screening',
     'rest_framework',
     'corsheaders',
     'django.contrib.admin',

@@ -9,8 +9,7 @@ def home(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/resumes/', include('resumes.urls')), 
-    path('api/jobs/', include('job_descriptions.urls')),   
-    path('api-auth/', include('rest_framework.urls')),  # add REST framework browsable API
+    path('api/', include('resume_screening.urls')),
+    path('api-auth/', include('rest_framework.urls')),  # REST framework browsable API
     path('', home),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # helper to serve media files during development.
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # serve media files during development
