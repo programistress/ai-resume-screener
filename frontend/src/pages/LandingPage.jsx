@@ -37,7 +37,7 @@ const LandingPage = () => {
         </div>
         <button className='action__button' onClick={scrollToResumeScreen}>Get started</button>
       </div>
-      <ResumeUploadScreen ref={resumeScreenRef} onNextStep={scrollToJobDescScreen} />
+      <ResumeUploadScreen ref={resumeScreenRef} toNextStep={scrollToJobDescScreen} />
       <JobDescUploadScreen ref={jobDescScreenRef} />
 
     </div>
