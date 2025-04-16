@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef, useState, useEffect } from "react";
 import UploadForm from "../components/UploadForm";
 import "./JobDescUpload.css";
 import api from "../services/api";
@@ -6,6 +6,34 @@ import api from "../services/api";
 const JobDescUploadScreen = forwardRef((props, ref) => {
   const [error, setError] = useState("");
   const [uploadedJobs, setUploadedJobs] = useState([]);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  // on component mount load jobs from localStorage
+  useEffect(() => {
+    const storedJobs = localStorage.getItem("jobDescData");
+    console.log("Stored jobs from localStorage:", storedJobs);
+    
+    if (storedJobs) {
+      try {
+        const parsedJobs = JSON.parse(storedJobs);
+        console.log("Parsed jobs:", parsedJobs);
+        setUploadedJobs(parsedJobs);
+      } catch (err) {
+        console.error("Error parsing stored jobs:", err);
+        setUploadedJobs([]);
+      }
+    }
+    
+    setIsInitialLoad(false);
+  }, []);
+  
+  // whenever uploadedJobs changes but not on initial load
+  useEffect(() => {
+    if (!isInitialLoad) {
+      console.log("Saving jobs to localStorage:", uploadedJobs);
+      localStorage.setItem("jobDescData", JSON.stringify(uploadedJobs));
+    }
+  }, [uploadedJobs, isInitialLoad]);
 
   const handleSubmit = async (text) => {
     if (uploadedJobs.length >= 3) {
@@ -25,7 +53,7 @@ const JobDescUploadScreen = forwardRef((props, ref) => {
           {
             id: response.data.id,
             text: response.data.raw_text,
-            uploadedAt: new Date(),
+            uploadedAt: new Date().toISOString(),
           },
         ]);
       }
