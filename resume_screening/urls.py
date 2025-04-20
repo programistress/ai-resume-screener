@@ -4,7 +4,8 @@ from .views import (
     ResumeUploadAPI, 
     ResumeViewSet,
     JobDescriptionUploadAPI,
-    JobDescriptionViewSet
+    JobDescriptionViewSet,
+    JobAnalysisAPI
 )
 
 router = DefaultRouter()
@@ -20,4 +21,6 @@ urlpatterns = [
     
     # router URLs
     path('', include(router.urls)),
+
+    path('jobs/<int:job_id>/analysis/', JobAnalysisAPI.as_view(), name='job_analysis_api')
 ]

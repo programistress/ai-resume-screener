@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from .serializers import JobDescriptionSerializer, ResumeSerializer
+from .utils.bert_keyword_utils import analyze_job_requirements
 
 #i removed the forms and now validation is here
 #receives file, checks if it exists, creates resume object, saves the resume
@@ -90,3 +91,20 @@ class JobDescriptionViewSet(viewsets.ModelViewSet):
         if resume_id is not None:
             queryset = queryset.filter(resume_id=resume_id)
         return queryset
+    
+class JobAnalysisAPI(APIView):
+    permission_classes = [AllowAny]
+    
+    def get(self, request, job_id, *args, **kwargs):
+        try:
+            job = JobDescription.objects.get(id=job_id)
+
+            requirements = analyze_job_requirements(job.raw_text)
+            
+            return Response({
+                'job_id': job.id,
+                'requirements': requirements
+            }, status=status.HTTP_200_OK)
+            
+        except JobDescription.DoesNotExist:
+            return Response({'error': 'Job description not found'}, status=status.HTTP_404_NOT_FOUND)

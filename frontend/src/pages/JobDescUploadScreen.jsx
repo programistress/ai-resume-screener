@@ -12,7 +12,7 @@ const JobDescUploadScreen = forwardRef((props, ref) => {
   useEffect(() => {
     const storedJobs = localStorage.getItem("jobDescData");
     console.log("Stored jobs from localStorage:", storedJobs);
-    
+
     if (storedJobs) {
       try {
         const parsedJobs = JSON.parse(storedJobs);
@@ -23,11 +23,11 @@ const JobDescUploadScreen = forwardRef((props, ref) => {
         setUploadedJobs([]);
       }
     }
-    
+
     setIsInitialLoad(false);
   }, []);
-  
-  // whenever uploadedJobs changes but not on initial load
+
+  // whenever uploadedJobs changes but not on initial load)
   useEffect(() => {
     if (!isInitialLoad) {
       console.log("Saving jobs to localStorage:", uploadedJobs);
