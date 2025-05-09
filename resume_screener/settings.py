@@ -18,6 +18,11 @@ NLP_MODEL_CONFIG = {
     "zero_shot_classifier": "facebook/bart-large-mnli",
 }
 
+SKILL_EXTRACTION_CONFIG = {
+    "confidence_threshold": 0.7,
+    "max_phrase_length": 4,
+}
+
 INSTALLED_APPS = [
     'resume_screening',
     'rest_framework',

@@ -75,3 +75,31 @@ class JobDescription(models.Model):
                 print("No text could be embedded.")
         except Exception as e:
             print(f"Error embedding text: {e}")
+            
+class Skill(models.Model):
+
+    name = models.CharField(max_length=100, unique=True)
+    category = models.CharField(max_length=50)  # 'technical' or 'soft'
+    subcategory = models.CharField(max_length=50)  # 'programming_language', 'framework', etc.
+    
+    def __str__(self):
+        return f"{self.name} ({self.category}: {self.subcategory})"
+    
+    class Meta:
+        ordering = ['category', 'subcategory', 'name']
+
+class ResumeSkill(models.Model):
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name='skills')
+    skill = models.ForeignKey(Skill, on_delete=models.CASCADE, related_name='resumes')
+    confidence = models.FloatField(default=1.0)  # Confidence score of skill detection
+    
+    class Meta:
+        unique_together = ('resume', 'skill')
+
+class JobSkill(models.Model):
+    job = models.ForeignKey(JobDescription, on_delete=models.CASCADE, related_name='skills')
+    skill = models.ForeignKey(Skill, on_delete=models.CASCADE, related_name='jobs')
+    importance = models.FloatField(default=1.0)  # Importance of skill for the job
+    
+    class Meta:
+        unique_together = ('job', 'skill')
