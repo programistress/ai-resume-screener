@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from .serializers import JobDescriptionSerializer, ResumeSerializer
-from .utils.bert_keyword_utils import analyze_job_requirements
+from .utils.analyze_job_requirements import analyze_job_requirements
 
 #i removed the forms and now validation is here
 #receives file, checks if it exists, creates resume object, saves the resume
