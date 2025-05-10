@@ -6,7 +6,7 @@ def extract_skills_from_text(text):
     """
     extracting skills from text by matching with our skills dictionary
     args: text
-    returns: a list of dictionaries
+    returns: a list of dictionaries w skills info
     """
     if not text:
         return []
@@ -48,7 +48,7 @@ def extract_skills_from_text(text):
     #     "Machine Learning": {"name": "Machine Learning", "category": "technical", "subcategory": "data_and_ai"}
     # }
     
-
+    
 def extract_skills_with_context(text, context_window=50):
     """    
     extracts skills with surrounding context for better analysis

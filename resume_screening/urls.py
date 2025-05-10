@@ -5,7 +5,8 @@ from .views import (
     ResumeViewSet,
     JobDescriptionUploadAPI,
     JobDescriptionViewSet,
-    JobAnalysisAPI
+    JobAnalysisAPI,
+    SkillMatchingAPI
 )
 
 router = DefaultRouter()
@@ -22,5 +23,7 @@ urlpatterns = [
     # router URLs
     path('', include(router.urls)),
 
-    path('jobs/<int:job_id>/analysis/', JobAnalysisAPI.as_view(), name='job_analysis_api')
+    path('jobs/<int:job_id>/analysis/', JobAnalysisAPI.as_view(), name='job_analysis_api'),
+    
+    path('skills/match/<int:resume_id>/<int:job_id>/', SkillMatchingAPI.as_view(), name='skill_matching_api')
 ]

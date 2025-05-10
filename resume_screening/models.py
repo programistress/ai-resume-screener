@@ -101,6 +101,27 @@ class JobDescription(models.Model):
         except Exception as e:
             print(f"Error embedding text: {e}")
             
+    def save_job_skills(self, extracted_skills):
+        # clear existing skills for this job to avoid duplicates
+        JobSkill.objects.filter(job=self).delete()
+        
+        for skill_info in extracted_skills:
+            # get or create the skill in the database
+            skill, created = Skill.objects.get_or_create(
+                name=skill_info['name'],
+                defaults={
+                    'category': skill_info['category'],
+                    'subcategory': skill_info['subcategory']
+                }
+            )
+            
+            # relationship between job and skill
+            JobSkill.objects.create(
+                job=self,
+                skill=skill,
+                importance=1.0  # default
+            )
+                
 class Skill(models.Model):
     name = models.CharField(max_length=100, unique=True)
     category = models.CharField(max_length=50)  # 'technical' or 'soft'

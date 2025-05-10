@@ -8,6 +8,7 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from .serializers import JobDescriptionSerializer, ResumeSerializer
 from .utils.analyze_job_requirements import analyze_job_requirements
+from resume_screening.utils.skill_matching import calculate_skill_match
 
 #i removed the forms and now validation is here
 #receives file, checks if it exists, creates resume object, saves the resume
@@ -108,3 +109,23 @@ class JobAnalysisAPI(APIView):
             
         except JobDescription.DoesNotExist:
             return Response({'error': 'Job description not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+class SkillMatchingAPI(APIView):
+    permission_classes = [AllowAny]
+    
+    def get(self, request, resume_id, job_id, *args, **kwargs):
+        try:
+            # verify the resume and job description exist
+            resume = Resume.objects.get(id=resume_id)
+            job = JobDescription.objects.get(id=job_id)
+            
+            match_results = calculate_skill_match(resume_id, job_id)
+            
+            return Response({
+                'resume_id': resume_id,
+                'job_id': job_id,
+                'match_results': match_results
+            }, status=status.HTTP_200_OK)
+            
+        except (Resume.DoesNotExist, JobDescription.DoesNotExist) as e:
+            return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
