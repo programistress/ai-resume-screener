@@ -4,7 +4,9 @@ from django.core.exceptions import ValidationError
 from .utils.text_extraction import extract_text
 from .utils.bert_utils import get_bert_embedding
 import os
-
+from .utils.extract_skills import extract_skills_from_text
+from .utils.skills_dictionaries import ALL_SKILLS
+        
 
 class Resume(models.Model):
     file = models.FileField(upload_to='resumes/')
@@ -31,7 +33,6 @@ class Resume(models.Model):
     # extracts text, generates embedding vectors
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        
         file_path = self.file.path
         if os.path.exists(file_path):
             try:
@@ -41,10 +42,34 @@ class Resume(models.Model):
                     super().save(update_fields=['extracted_text'])
                     self.embedding_vector = get_bert_embedding(self.extracted_text)
                     super().save(update_fields=['embedding_vector'])
+                    
+                    extracted_skills = extract_skills_from_text(self.extracted_text)
+                    self.save_skills(extracted_skills)
                 else:
                     print("No text could be extracted.")
             except Exception as e:
                 print(f"Error during extraction: {e}")
+                
+    def save_skills(self, extracted_skills):
+        #clear existing skills for this resume to avoid duplicates
+        ResumeSkill.objects.filter(resume=self).delete()
+        
+        for skill_info in extracted_skills:
+            #get or create the skill in the database
+            skill, created = Skill.objects.get_or_create(
+                name=skill_info['name'],
+                defaults={
+                    'category': skill_info['category'],
+                    'subcategory': skill_info['subcategory']
+                }
+            )
+            
+            #create the relationship between resume and skill
+            ResumeSkill.objects.create(
+                resume=self,
+                skill=skill,
+                confidence=1.0  # default
+            )
 
 
 class JobDescription(models.Model):
@@ -77,7 +102,6 @@ class JobDescription(models.Model):
             print(f"Error embedding text: {e}")
             
 class Skill(models.Model):
-
     name = models.CharField(max_length=100, unique=True)
     category = models.CharField(max_length=50)  # 'technical' or 'soft'
     subcategory = models.CharField(max_length=50)  # 'programming_language', 'framework', etc.
