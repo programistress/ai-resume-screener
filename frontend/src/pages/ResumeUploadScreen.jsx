@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import UploadForm from "../components/UploadForm";
 
 const ResumeUploadScreen = forwardRef((props, ref) => {
@@ -11,7 +11,7 @@ const ResumeUploadScreen = forwardRef((props, ref) => {
     const resumeData = localStorage.getItem("resumeData");
     if (resumeData) {
       const parsedData = JSON.parse(resumeData);
-      setSuccess(`Resume already uploaded: ${parsedData.filename}`);
+      setSuccess(`Resume uploaded: ${parsedData.filename}`);
     }
   }, []);
 

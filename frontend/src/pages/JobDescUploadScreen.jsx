@@ -11,12 +11,10 @@ const JobDescUploadScreen = forwardRef((props, ref) => {
   // on component mount load jobs from localStorage
   useEffect(() => {
     const storedJobs = localStorage.getItem("jobDescData");
-    console.log("Stored jobs from localStorage:", storedJobs);
 
     if (storedJobs) {
       try {
         const parsedJobs = JSON.parse(storedJobs);
-        console.log("Parsed jobs:", parsedJobs);
         setUploadedJobs(parsedJobs);
       } catch (err) {
         console.error("Error parsing stored jobs:", err);
@@ -30,7 +28,6 @@ const JobDescUploadScreen = forwardRef((props, ref) => {
   // whenever uploadedJobs changes but not on initial load)
   useEffect(() => {
     if (!isInitialLoad) {
-      console.log("Saving jobs to localStorage:", uploadedJobs);
       localStorage.setItem("jobDescData", JSON.stringify(uploadedJobs));
     }
   }, [uploadedJobs, isInitialLoad]);
@@ -65,7 +62,7 @@ const JobDescUploadScreen = forwardRef((props, ref) => {
 
   const handleDelete = async (jobId) => {
     try {
-      await api.delete(`job-descriptions/${jobId}/`);
+      await api.delete(`/job-descriptions/${jobId}/`);
       setUploadedJobs(uploadedJobs.filter((job) => job.id !== jobId));
     } catch (err) {
       console.error("Delete failed:", err);
@@ -112,6 +109,9 @@ const JobDescUploadScreen = forwardRef((props, ref) => {
           <UploadForm isFileUpload={false} onSubmit={handleSubmit} />
         </div>
       </div>
+      <button className="action__button" >
+        Next Step
+      </button>
     </div>
   );
 });
