@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
-const UploadForm = ({ isFileUpload, fileTypes, onSubmit }) => {
+// component for uploading a resume file or a text
+// args are is it a file or text, and the submit saves the data to our database if it is within norms
+const UploadForm = ({ isFileUpload, onSubmit }) => {
     const [file, setFile] = useState(null)
     const [text, setText] = useState('')
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const fileTypes = [".pdf", ".docx", ".txt"]
 
 
     // set file to null if user cancelled the selection and updates file state when changed
@@ -17,7 +20,7 @@ const UploadForm = ({ isFileUpload, fileTypes, onSubmit }) => {
         }
 
         const file_extension = selectedFile.name.split('.').pop().toLowerCase();
-        if (fileTypes && !fileTypes.includes(`.${file_extension}`)) {
+        if (!fileTypes.includes(`.${file_extension}`)) {
             setError(`Sorry, we only accept files of ${fileTypes.join(',')} formats`)
             setFile(null)
             return
@@ -32,6 +35,7 @@ const UploadForm = ({ isFileUpload, fileTypes, onSubmit }) => {
         setError('')
     }
 
+    //submits thew data into our arg onSubmit function if its valid and makes the button show loading
     const handleSubmit = async (e) => {
         e.preventDefault()
 

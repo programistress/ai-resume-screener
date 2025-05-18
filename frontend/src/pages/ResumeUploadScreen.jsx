@@ -1,5 +1,6 @@
 import { forwardRef, useEffect, useState } from "react";
 import UploadForm from "../components/UploadForm";
+import api from "../services/api";
 
 const ResumeUploadScreen = forwardRef((props, ref) => {
   const [error, setError] = useState("");
@@ -26,20 +27,15 @@ const ResumeUploadScreen = forwardRef((props, ref) => {
     formData.append("file", file);
 
     try {
-      const response = await fetch(
-        "http://localhost:8000/api/resumes/upload/",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await api.post("resumes/upload/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `Error: ${response.status}`);
-      }
+      // axios automatically parses JSON and puts it in response.data
+      const data = response.data;
 
-      const data = await response.json();
       localStorage.setItem(
         "resumeData",
         JSON.stringify({
@@ -55,7 +51,15 @@ const ResumeUploadScreen = forwardRef((props, ref) => {
       setSuccess("Resume uploaded successfully!");
     } catch (error) {
       console.error("Upload failed:", error);
-      setError("Upload failed. Please try again.");
+
+      // more detailed error handling
+      const errorMessage =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        error.message ||
+        "Upload failed. Please try again.";
+
+      setError(errorMessage);
     }
   };
 
@@ -65,11 +69,7 @@ const ResumeUploadScreen = forwardRef((props, ref) => {
         <div className="upload__form">
           {error && <div className="error-message">{error}</div>}
           {success && <div className="success-message">{success}</div>}
-          <UploadForm
-            fileTypes={[".pdf", ".docx", ".txt"]}
-            onSubmit={handleSubmit}
-            isFileUpload={true}
-          />
+          <UploadForm onSubmit={handleSubmit} isFileUpload={true} />
         </div>
         <header className="upload__form-header">
           <h1 className="welcome__title right">Step 1: Upload Your Resume</h1>
@@ -80,7 +80,7 @@ const ResumeUploadScreen = forwardRef((props, ref) => {
           </p>
           <p className="requirements right">
             {" "}
-            File types: PDF, DOCX, TXT <br /> Max size: 10MB
+            File types supported: PDF, DOCX, TXT <br /> Max size: 10MB
           </p>
         </header>
       </div>
