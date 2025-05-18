@@ -1,11 +1,13 @@
 import { forwardRef, useEffect, useState } from "react";
+import './ResumeUploadScreen.css'
 import UploadForm from "../components/UploadForm";
 import api from "../services/api";
 
+ // accepts a ref as an argument
 const ResumeUploadScreen = forwardRef((props, ref) => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const { toNextStep } = props;
+  const { toNextStep } = props; //destructuring assignment
 
   //checks localStorage when component loads
   useEffect(() => {

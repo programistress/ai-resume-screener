@@ -1,8 +1,9 @@
-import React, { forwardRef, useState, useEffect } from "react";
+import { forwardRef, useState, useEffect } from "react";
 import UploadForm from "../components/UploadForm";
 import "./JobDescUpload.css";
 import api from "../services/api";
 
+//forwardRef means it accepts a ref from its parent
 const JobDescUploadScreen = forwardRef((props, ref) => {
   const [error, setError] = useState("");
   const [uploadedJobs, setUploadedJobs] = useState([]);
@@ -25,13 +26,14 @@ const JobDescUploadScreen = forwardRef((props, ref) => {
     setIsInitialLoad(false);
   }, []);
 
-  // whenever uploadedJobs changes but not on initial load)
+  // whenever uploadedJobs changes but not on initial load
   useEffect(() => {
     if (!isInitialLoad) {
       localStorage.setItem("jobDescData", JSON.stringify(uploadedJobs));
     }
   }, [uploadedJobs, isInitialLoad]);
 
+  // submit function for job desc
   const handleSubmit = async (text) => {
     if (uploadedJobs.length >= 3) {
       setError(
@@ -60,6 +62,7 @@ const JobDescUploadScreen = forwardRef((props, ref) => {
     }
   };
 
+  // deleting a jobdesc from db and our state
   const handleDelete = async (jobId) => {
     try {
       await api.delete(`/job-descriptions/${jobId}/`);
@@ -109,9 +112,7 @@ const JobDescUploadScreen = forwardRef((props, ref) => {
           <UploadForm isFileUpload={false} onSubmit={handleSubmit} />
         </div>
       </div>
-      <button className="action__button" >
-        Next Step
-      </button>
+      <button className="action__button">Next Step</button>
     </div>
   );
 });

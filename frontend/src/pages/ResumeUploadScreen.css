@@ -38,7 +38,6 @@ body {
   animation: fadeInLeft 1s ease-out;
 }
 
-
 /* Upload Form */
 .upload__form {
   width: 40%;
@@ -78,7 +77,7 @@ body {
 /* File Input */
 .file-input__container {
   background-color: rgba(133, 138, 227, 0.05);
-  border: 2px dashed #858AE3;
+  border: 2px dashed #858ae3;
   border-radius: 10px;
   padding: 40px 20px;
   text-align: center;
@@ -89,7 +88,7 @@ body {
 
 .file-input__container:hover {
   background-color: rgba(133, 138, 227, 0.1);
-  border-color: #6A4FB8;
+  border-color: #6a4fb8;
 }
 
 .file-input__container input[type="file"] {
@@ -106,7 +105,7 @@ body {
 /* File Upload Label */
 .file-upload__label {
   display: inline-block;
-  background-color: #6A4FB8;
+  background-color: #6a4fb8;
   color: white;
   padding: 12px 24px;
   border-radius: 30px;
@@ -118,7 +117,7 @@ body {
 }
 
 .file-upload__label:hover {
-  background-color: #4E148C;
+  background-color: #4e148c;
   transform: translateY(-2px);
 }
 
@@ -142,7 +141,7 @@ body {
 
 /* Submit Button */
 .submit__button {
-  background: linear-gradient(to right, #6A4FB8, #4E148C);
+  background: linear-gradient(to right, #6a4fb8, #4e148c);
   color: white;
   border: none;
   padding: 14px 30px;

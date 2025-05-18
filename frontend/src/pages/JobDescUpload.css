@@ -10,7 +10,6 @@
   flex-direction: column;
 }
 
-
 /* Background decoration
   .job-desc-screen::before {
     content: "";
@@ -47,11 +46,13 @@
   line-height: 1.2;
   font-weight: 800;
   margin-bottom: 25px;
-  background-image: linear-gradient(to right,
-      #858AE3,
-      #6A4FB8,
-      #4E148C,
-      #858AE3);
+  background-image: linear-gradient(
+    to right,
+    #858ae3,
+    #6a4fb8,
+    #4e148c,
+    #858ae3
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -126,7 +127,7 @@
 
 /* Button styling */
 .analyze-button {
-  background: linear-gradient(to right, #6A4FB8, #4E148C);
+  background: linear-gradient(to right, #6a4fb8, #4e148c);
   color: white;
   border: none;
   padding: 16px 30px;
@@ -153,7 +154,7 @@
 .uploaded-jobs-title {
   font-size: 20px;
   font-weight: 600;
-  color: #4E148C;
+  color: #4e148c;
   margin-bottom: 15px;
   padding-bottom: 10px;
   border-bottom: 2px solid rgba(106, 79, 184, 0.2);
