@@ -1,22 +1,67 @@
 import { forwardRef, useEffect, useState } from "react";
-import './ResumeUploadScreen.css'
+import "./ResumeUploadScreen.css";
 import UploadForm from "../components/UploadForm";
 import api from "../services/api";
 
- // accepts a ref as an argument
+// accepts a ref as an argument
 const ResumeUploadScreen = forwardRef((props, ref) => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [resumeData, setResumeData] = useState(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const { toNextStep } = props; //destructuring assignment
 
-  //checks localStorage when component loads
+  //load resume from localStorage on mount
   useEffect(() => {
-    const resumeData = localStorage.getItem("resumeData");
-    if (resumeData) {
-      const parsedData = JSON.parse(resumeData);
-      setSuccess(`Resume uploaded: ${parsedData.filename}`);
+    const storedResume = localStorage.getItem("resumeData");
+
+    if (storedResume) {
+      try {
+        setResumeData(JSON.parse(storedResume));
+        setSuccess(`Resume uploaded`);
+      } catch (error) {
+        console.error("Error parsing stored resume:", error);
+      }
     }
+
+    setIsInitialLoad(false);
   }, []);
+
+  // save changes to localStorage
+  useEffect(() => {
+    if (!isInitialLoad && resumeData) {
+      localStorage.setItem("resumeData", JSON.stringify(resumeData));
+    }
+  }, [resumeData, isInitialLoad]);
+
+  // deleting the resume by id - from local storage and db
+  const handleDelete = async () => {
+    // if there is no resume = clear the storage
+    if (!resumeData || !resumeData.id) {
+      localStorage.removeItem("resumeData");
+      setResumeData(null);
+      setSuccess("");
+      return;
+    }
+
+    try {
+      setError("");
+      // delete from database
+      await api.delete(`/resumes/${resumeData.id}/`);
+      // if successful, clear localStorage and state
+      localStorage.removeItem("resumeData");
+      setResumeData(null);
+      setSuccess("Resume deleted successfully!");
+      console.log("Resume deleted successfully");
+    } catch (error) {
+      console.error("Delete failed:", error);
+      setError(
+        `Failed to delete resume: ${
+          error.response?.data?.message || error.message || "Unknown error"
+        }`
+      );
+    }
+  };
 
   const handleSubmit = async (file) => {
     if (!file) {
@@ -70,7 +115,19 @@ const ResumeUploadScreen = forwardRef((props, ref) => {
       <div className="row">
         <div className="upload__form">
           {error && <div className="error-message">{error}</div>}
-          {success && <div className="success-message">{success}</div>}
+          {success && (
+            <div className="success-message">
+              {success}
+              {resumeData && (
+                <>
+                  <p>File: {resumeData.filename}</p>
+                  <button onClick={handleDelete} className="delete-button">
+                    Delete Resume
+                  </button>
+                </>
+              )}
+            </div>
+          )}
           <UploadForm onSubmit={handleSubmit} isFileUpload={true} />
         </div>
         <header className="upload__form-header">

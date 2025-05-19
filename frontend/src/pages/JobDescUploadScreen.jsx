@@ -15,8 +15,7 @@ const JobDescUploadScreen = forwardRef((props, ref) => {
 
     if (storedJobs) {
       try {
-        const parsedJobs = JSON.parse(storedJobs);
-        setUploadedJobs(parsedJobs);
+        setUploadedJobs(JSON.parse(storedJobs));
       } catch (err) {
         console.error("Error parsing stored jobs:", err);
         setUploadedJobs([]);
