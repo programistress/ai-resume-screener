@@ -33,6 +33,17 @@ const ResumeUploadScreen = forwardRef((props, ref) => {
     }
   }, [resumeData, isInitialLoad]);
 
+  const deleteOldResumeFromDatabase = async (resumeId) => {
+    try {
+      await api.delete(`/resumes/${resumeId}/`);
+      console.log(`Old resume with ID ${resumeId} deleted successfully`);
+      return true;
+    } catch (error) {
+      console.error("Failed to delete old resume:", error);
+      return false;
+    }
+  };
+
   // deleting the resume by id - from local storage and db
   const handleDelete = async () => {
     // if there is no resume = clear the storage
@@ -69,6 +80,21 @@ const ResumeUploadScreen = forwardRef((props, ref) => {
     }
 
     setError("");
+
+    if (resumeData && resumeData.id) {
+      console.log("Found existing resume, deleting it first...");
+      const deleteSuccess = await deleteOldResumeFromDatabase(resumeData.id);
+
+      if (deleteSuccess) {
+        console.log("Old resume deleted successfully");
+      } else {
+        console.log(
+          "Failed to delete old resume, but continuing with new upload"
+        );
+        setError("old resume delete failed")
+      }
+    }
+
     const formData = new FormData();
     formData.append("file", file);
 
@@ -132,7 +158,7 @@ const ResumeUploadScreen = forwardRef((props, ref) => {
 
   return (
     <div className="second__screen" ref={ref}>
-          {success && <div className="success-message-floating">{success}</div>}
+      {success && <div className="success-message-floating">{success}</div>}
       <div className="row">
         <div className="upload__form">
           {error && <div className="error-message">{error}</div>}
