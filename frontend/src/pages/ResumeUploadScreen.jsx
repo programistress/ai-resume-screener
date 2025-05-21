@@ -18,7 +18,6 @@ const ResumeUploadScreen = forwardRef((props, ref) => {
     if (storedResume) {
       try {
         setResumeData(JSON.parse(storedResume));
-        setSuccess(`Resume uploaded`);
       } catch (error) {
         console.error("Error parsing stored resume:", error);
       }
@@ -83,6 +82,16 @@ const ResumeUploadScreen = forwardRef((props, ref) => {
       // axios automatically parses JSON and puts it in response.data
       const data = response.data;
 
+      const newResumeData = {
+        id: data.id,
+        filename: file.name,
+        uploadedAt: new Date().toISOString(),
+        extractedText:
+          data.extracted_text?.substring(0, 100) || "Text extracted",
+      };
+      localStorage.setItem("resumeData", JSON.stringify(newResumeData));
+      setResumeData(newResumeData);
+
       localStorage.setItem(
         "resumeData",
         JSON.stringify({
@@ -110,22 +119,30 @@ const ResumeUploadScreen = forwardRef((props, ref) => {
     }
   };
 
+  // auto-hide success message after 2 seconds
+  useEffect(() => {
+    let timer;
+    if (success) {
+      timer = setTimeout(() => {
+        setSuccess("");
+      }, 2000);
+    }
+    return () => clearTimeout(timer);
+  }, [success]);
+
   return (
     <div className="second__screen" ref={ref}>
+          {success && <div className="success-message-floating">{success}</div>}
       <div className="row">
         <div className="upload__form">
           {error && <div className="error-message">{error}</div>}
-          {success && (
-            <div className="success-message">
-              {success}
-              {resumeData && (
-                <>
-                  <p>File: {resumeData.filename}</p>
-                  <button onClick={handleDelete} className="delete-button">
-                    Delete Resume
-                  </button>
-                </>
-              )}
+          {resumeData && (
+            <div className="resume-info-container">
+              <p className="file-info">File: {resumeData.filename}</p>
+              <button onClick={handleDelete} className="delete-resume-button">
+                <span className="delete-icon">×</span>
+                Remove
+              </button>
             </div>
           )}
           <UploadForm onSubmit={handleSubmit} isFileUpload={true} />

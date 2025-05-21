@@ -69,6 +69,66 @@ body {
   border-left: 4px solid #dc3545;
 }
 
+/* Success Message */
+/* .success-message {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  width: 100%;
+  text-align: center;
+  border-left: 4px solid #28a745;
+  animation: fadeIn 0.3s ease-out, fadeOut 0.3s ease-out 1.7s;
+} */
+
+/* Resume Info Container */
+.resume-info-container {
+  background-color: rgba(106, 79, 184, 0.05);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  width: 100%;
+  text-align: center;
+  border: 1px solid rgba(106, 79, 184, 0.2);
+}
+
+.file-info {
+  margin: 10px 0;
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+}
+
+/* Delete Button Styling */
+.delete-resume-button {
+  background-color: transparent;
+  color: #888;
+  border: 1px solid #ddd;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px auto 0;
+}
+
+.delete-resume-button:hover {
+  color: #d63031;
+  border-color: #d63031;
+  background-color: rgba(214, 48, 49, 0.05);
+}
+
+.delete-icon {
+  font-size: 16px;
+  margin-right: 4px;
+  font-weight: bold;
+}
+
 /* Form Container */
 .upload-form__container {
   width: 100%;
@@ -167,6 +227,21 @@ body {
   box-shadow: none;
 }
 
-.success-message {
-  margin-bottom: 10px;
+.success-message-floating {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(40, 167, 69, 0.95);
+  color: white;
+  padding: 15px 30px;
+  border-radius: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  text-align: center;
+  font-weight: 500;
+  min-width: 250px;
+  max-width: 80%;
+  animation: fadeInDown 0.3s ease-out, fadeOutUp 0.3s ease-out 1.7s;
 }
+
