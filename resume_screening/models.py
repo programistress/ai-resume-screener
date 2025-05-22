@@ -123,15 +123,18 @@ class JobDescription(models.Model):
             )
                 
 class Skill(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    category = models.CharField(max_length=50)  # 'technical' or 'soft'
+    name = models.CharField(max_length=100, unique=True, db_index=True)
+    category = models.CharField(max_length=50, db_index=True)  # 'technical' or 'soft'
     subcategory = models.CharField(max_length=50)  # 'programming_language', 'framework', etc.
     
     def __str__(self):
         return f"{self.name} ({self.category}: {self.subcategory})"
     
     class Meta:
-        ordering = ['category', 'subcategory', 'name']
+        ordering = ['category', 'subcategory', 'name'],
+        indexes = [
+            models.Index(fields=['category', 'subcategory']),
+        ]
 
 class ResumeSkill(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name='skills')
