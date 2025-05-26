@@ -96,6 +96,8 @@ class JobDescription(models.Model):
             if self.raw_text:
                 self.embedding_vector = get_bert_embedding(self.raw_text)
                 super().save(update_fields=['embedding_vector'])
+                extracted_skills = extract_skills_from_text(self.raw_text)
+                self.save_job_skills(extracted_skills)
             else:
                 print("No text could be embedded.")
         except Exception as e:
