@@ -5,7 +5,8 @@ from .utils.text_extraction import extract_text
 from .utils.bert_utils import get_bert_embedding
 import os
 from .utils.extract_skills import extract_skills_from_text
-from .utils.skills_dictionaries import ALL_SKILLS
+from .utils.enhanced_skill_extraction import EnhancedSkillExtractor
+from .utils.analyze_job_requirements import JobRequirementsAnalyzer
         
 
 class Resume(models.Model):
@@ -43,19 +44,22 @@ class Resume(models.Model):
                     self.embedding_vector = get_bert_embedding(self.extracted_text)
                     super().save(update_fields=['embedding_vector'])
                     
-                    extracted_skills = extract_skills_from_text(self.extracted_text)
-                    self.save_skills(extracted_skills)
+                    # Use enhanced skill extraction
+                    extractor = EnhancedSkillExtractor()
+                    enhanced_skills = extractor.extract_skills_with_confidence(self.extracted_text)
+                    self.save_enhanced_skills(enhanced_skills)
                 else:
                     print("No text could be extracted.")
             except Exception as e:
                 print(f"Error during extraction: {e}")
                 
-    def save_skills(self, extracted_skills):
-        #clear existing skills for this resume to avoid duplicates
+    def save_enhanced_skills(self, enhanced_skills):
+        """Save skills with enhanced AI analysis data"""
+        # Clear existing skills for this resume to avoid duplicates
         ResumeSkill.objects.filter(resume=self).delete()
         
-        for skill_info in extracted_skills:
-            #get or create the skill in the database
+        for skill_info in enhanced_skills:
+            # Get or create the skill in the database
             skill, created = Skill.objects.get_or_create(
                 name=skill_info['name'],
                 defaults={
@@ -64,7 +68,34 @@ class Resume(models.Model):
                 }
             )
             
-            #create the relationship between resume and skill
+            # Create the relationship between resume and skill with enhanced data
+            ResumeSkill.objects.create(
+                resume=self,
+                skill=skill,
+                confidence=skill_info.get('confidence', 1.0),
+                skill_level=skill_info.get('skill_level', 'unspecified'),
+                matched_text=skill_info.get('matched_text', '')[:200],  # Truncate to field length
+                context=skill_info.get('context', '')[:500],  # Truncate context
+                base_confidence=skill_info.get('base_confidence', 1.0),
+                context_importance=skill_info.get('context_importance', 0.5)
+            )
+    
+    def save_skills(self, extracted_skills):
+        """Backward compatibility method for basic skill extraction"""
+        # Clear existing skills for this resume to avoid duplicates
+        ResumeSkill.objects.filter(resume=self).delete()
+        
+        for skill_info in extracted_skills:
+            # Get or create the skill in the database
+            skill, created = Skill.objects.get_or_create(
+                name=skill_info['name'],
+                defaults={
+                    'category': skill_info['category'],
+                    'subcategory': skill_info['subcategory']
+                }
+            )
+            
+            # Create the relationship between resume and skill
             ResumeSkill.objects.create(
                 resume=self,
                 skill=skill,
@@ -96,19 +127,22 @@ class JobDescription(models.Model):
             if self.raw_text:
                 self.embedding_vector = get_bert_embedding(self.raw_text)
                 super().save(update_fields=['embedding_vector'])
-                extracted_skills = extract_skills_from_text(self.raw_text)
-                self.save_job_skills(extracted_skills)
+                # Use enhanced job requirements analyzer
+                analyzer = JobRequirementsAnalyzer()
+                job_analysis = analyzer.analyze(self.raw_text)
+                self.save_enhanced_job_skills(job_analysis['all_skills'])
             else:
                 print("No text could be embedded.")
         except Exception as e:
             print(f"Error embedding text: {e}")
             
-    def save_job_skills(self, extracted_skills):
-        # clear existing skills for this job to avoid duplicates
+    def save_enhanced_job_skills(self, analyzed_skills):
+        """Save job skills with enhanced AI analysis data"""
+        # Clear existing skills for this job to avoid duplicates
         JobSkill.objects.filter(job=self).delete()
         
-        for skill_info in extracted_skills:
-            # get or create the skill in the database
+        for skill_info in analyzed_skills:
+            # Get or create the skill in the database
             skill, created = Skill.objects.get_or_create(
                 name=skill_info['name'],
                 defaults={
@@ -117,7 +151,36 @@ class JobDescription(models.Model):
                 }
             )
             
-            # relationship between job and skill
+            # Create relationship between job and skill with enhanced data
+            JobSkill.objects.create(
+                job=self,
+                skill=skill,
+                importance=skill_info.get('importance', 1.0),
+                skill_level=skill_info.get('skill_level', 'unspecified'),
+                matched_text=skill_info.get('matched_text', '')[:200],  # Truncate to field length
+                context=skill_info.get('context', '')[:500],  # Truncate context
+                mention_count=skill_info.get('mention_count', 1),
+                position_score=skill_info.get('position_score', 0.5),
+                confidence=skill_info.get('confidence', 1.0),
+                context_importance=skill_info.get('context_importance', 0.5)
+            )
+    
+    def save_job_skills(self, extracted_skills):
+        """Backward compatibility method for basic skill extraction"""
+        # Clear existing skills for this job to avoid duplicates
+        JobSkill.objects.filter(job=self).delete()
+        
+        for skill_info in extracted_skills:
+            # Get or create the skill in the database
+            skill, created = Skill.objects.get_or_create(
+                name=skill_info['name'],
+                defaults={
+                    'category': skill_info['category'],
+                    'subcategory': skill_info['subcategory']
+                }
+            )
+            
+            # Create relationship between job and skill
             JobSkill.objects.create(
                 job=self,
                 skill=skill,
@@ -133,23 +196,51 @@ class Skill(models.Model):
         return f"{self.name} ({self.category}: {self.subcategory})"
     
     class Meta:
-        ordering = ['category', 'subcategory', 'name'],
+        ordering = ['category', 'subcategory', 'name']
         indexes = [
             models.Index(fields=['category', 'subcategory']),
         ]
 
 class ResumeSkill(models.Model):
+    SKILL_LEVELS = [
+        ('unspecified', 'Unspecified'),
+        ('beginner', 'Beginner'),
+        ('intermediate', 'Intermediate'),
+        ('expert', 'Expert'),
+    ]
+    
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name='skills')
     skill = models.ForeignKey(Skill, on_delete=models.CASCADE, related_name='resumes')
-    confidence = models.FloatField(default=1.0)  # Confidence score of skill detection
+    confidence = models.FloatField(default=1.0)  # Enhanced confidence score from AI analysis
+    skill_level = models.CharField(max_length=20, choices=SKILL_LEVELS, default='unspecified')
+    matched_text = models.CharField(max_length=200, blank=True)  # What text was matched
+    context = models.TextField(blank=True)  # Context where skill was found
+    base_confidence = models.FloatField(default=1.0)  # Base matching confidence
+    context_importance = models.FloatField(default=0.5)  # Context importance score
     
     class Meta:
-        unique_together = ('resume', 'skill')
+        constraints = [
+            models.UniqueConstraint(fields=['resume', 'skill'], name='unique_resume_skill')
+        ]
 
 class JobSkill(models.Model):
+    SKILL_LEVELS = [
+        ('unspecified', 'Unspecified'),
+        ('beginner', 'Beginner'),
+        ('intermediate', 'Intermediate'),
+        ('expert', 'Expert'),
+    ]
+    
     job = models.ForeignKey(JobDescription, on_delete=models.CASCADE, related_name='skills')
     skill = models.ForeignKey(Skill, on_delete=models.CASCADE, related_name='jobs')
-    importance = models.FloatField(default=1.0)  # Importance of skill for the job
+    importance = models.FloatField(default=1.0)  # Enhanced importance score from AI analysis
+    skill_level = models.CharField(max_length=20, choices=SKILL_LEVELS, default='unspecified')
+    matched_text = models.CharField(max_length=200, blank=True)  # What text was matched
+    context = models.TextField(blank=True)  # Context where skill was found
+    mention_count = models.IntegerField(default=1)  # How many times mentioned
+    position_score = models.FloatField(default=0.5)  # Position importance score
+    confidence = models.FloatField(default=1.0)  # Base confidence of detection
+    context_importance = models.FloatField(default=0.5)  # Context importance score
     
     class Meta:
         unique_together = ('job', 'skill')
